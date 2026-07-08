@@ -1,0 +1,16 @@
+name,email,phone,company,service_needed,budget,timeline,message,consent,source,status,created_at
+Ayesha Malik,ayesha.malik@brightco.com,+92-300-1234567,BrightCo Retail,automation,1500,2 weeks,"Need to automate our order confirmation emails",yes,website_form,new,2026-06-01 09:15
+Hassan Raza,h.raza@urbanfit.pk,+92-301-2345678,UrbanFit Gym,crm_setup,800,1 month,"Looking for a simple CRM to track members",yes,referral,new,2026-06-01 11:30
+Sara Ahmed,sara@teatimebakery.com,+92-302-3456789,Tea Time Bakery,ai_agent,500,ASAP,"Want a chatbot for customer FAQs",no,instagram_ad,new,2026-06-02 08:45
+Bilal Khan,bilal.khan@fastlogix.com,+92-303-4567890,FastLogix Shipping,scraping,3000,2 months,"Need competitor price monitoring",yes,website_form,contacted,2026-06-02 14:20
+Zainab Tariq,zainab.t@glowbeauty.pk,+92-304-5678901,Glow Beauty Salon,automation,,3 weeks,"Not sure of budget yet, need booking reminders",yes,facebook_ad,new,2026-06-03 10:00
+Omar Farooq,omar@technova.io,+92-305-6789012,TechNova Solutions,ai_agent,5000,1 month,"Need an internal support bot for our team",yes,referral,qualified,2026-06-03 16:10
+Mariam Sheikh,mariam.sheikh@gmail.com,+92-306-7890123,,web_dev,200,flexible,"Just exploring options for now",no,website_form,new,2026-06-04 09:30
+Ahmed Iqbal,ahmed.iqbal@dailymart.pk,+92-307-8901234,DailyMart Grocers,crm_setup,1200,2 weeks,"Need lead tracking for our sales team",yes,linkedin,contacted,2026-06-04 13:45
+Fatima Noor,fatima.noor@styleboutique.com,+92-308-9012345,Style Boutique,automation,900,1 month,"Want automated Instagram order replies",yes,instagram_ad,new,2026-06-05 11:00
+Usman Ali,usman.ali@primeconsult.pk,+92-309-0123456,Prime Consulting,ai_agent,4000,ASAP,"Need a client onboarding assistant",yes,website_form,qualified,2026-06-05 15:30
+Hira Batool,hira.batool@edulearn.pk,+92-310-1234098,EduLearn Academy,crm_setup,700,3 weeks,"Simple student inquiry tracker needed",yes,referral,new,2026-06-06 08:20
+Noman Sheikh,noman.sheikh@buildright.com,+92-311-2345109,BuildRight Contractors,scraping,2500,1 month,"Need supplier price comparison data",no,website_form,new,2026-06-06 12:00
+Sadia Yousaf,sadia.y@petcarepk.com,+92-312-3456210,PetCare PK,automation,600,2 weeks,"Automate appointment confirmations for our vet clinic",yes,facebook_ad,contacted,2026-06-07 09:45
+Kamran Malik,kamran.malik@autozone.pk,,AutoZone Parts,web_dev,,flexible,"Phone number not provided, need website revamp",yes,website_form,new,2026-06-07 14:15
+Rabia Chaudhry,rabia.c@freshharvest.pk,+92-313-4567321,Fresh Harvest Foods,ai_agent,3500,6 weeks,"Need AI to classify wholesale order urgency",yes,linkedin,qualified,2026-06-08 10:30

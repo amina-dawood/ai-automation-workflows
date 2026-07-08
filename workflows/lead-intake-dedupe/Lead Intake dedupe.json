@@ -1,0 +1,707 @@
+{
+  "name": "Lead Intake dedupe",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-intake",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        -96
+      ],
+      "id": "4c468d1a-d81e-44fd-9250-717bcf5ca286",
+      "name": "Webhook",
+      "webhookId": "1c207e72-1753-477b-97da-d01e0e9d0f37"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0b1d10b9-30f9-47d4-bb44-f6770d40ef93",
+              "name": "name",
+              "value": "={{ $json.body.data.fields[0].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "5d3fcaa7-69b0-410a-bd3e-8bdbcc2891b3",
+              "name": "email",
+              "value": "={{ $json.body.data.fields[1].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "a1cbc4bc-aff9-4386-a47c-217d68c41f37",
+              "name": "phone",
+              "value": "={{ $json.body.data.fields[2].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "3a389fe3-0a0a-4b1f-b5de-0289495962cd",
+              "name": "company",
+              "value": "={{ $json.body.data.fields[3].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "2b391912-9f9d-41ea-8a27-bc13af3abee7",
+              "name": "service_needed",
+              "value": "={{\n  $json.body.data.fields[4].options.find(\n    option => option.id === $json.body.data.fields[4].value[0]\n  ).text\n}}",
+              "type": "string"
+            },
+            {
+              "id": "2fcb0271-649f-4f4f-aee3-4ddf1c763383",
+              "name": "budget",
+              "value": "={{ $json.body.data.fields[5].value  }}",
+              "type": "number"
+            },
+            {
+              "id": "e5309800-41b7-40f1-aa8c-c6f1ecdf7b2e",
+              "name": "timeline",
+              "value": "={{ $json.body.data.fields[6].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "500c633a-59f5-4ac5-a7f3-2342f24cc1b3",
+              "name": "message",
+              "value": "={{ $json.body.data.fields[7].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "9a5c8677-224e-4f41-bace-50b448ad3214",
+              "name": "consent",
+              "value": "={{ $json.body.data.fields[8].value }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -16,
+        -96
+      ],
+      "id": "7e535753-dc5d-4eb8-9c62-6d713a472e5f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appCGDrFxeErh9PhM",
+          "mode": "list",
+          "cachedResultName": "Lead CRM Training",
+          "cachedResultUrl": "https://airtable.com/appCGDrFxeErh9PhM"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbljg7hrydxkyEVL0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appCGDrFxeErh9PhM/tbljg7hrydxkyEVL0"
+        },
+        "filterByFormula": "=={{ \"{email}='\" + $json.email + \"'\" }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -96
+      ],
+      "id": "548ecff8-fa96-4f47-ae33-37f75fc89866",
+      "name": "Search records",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "qH9g1tijshCwcxIy",
+          "name": "Airtable OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "27b20285-39cd-47bc-93f2-2b189195b5d1",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        -96
+      ],
+      "id": "f0fe9385-3773-45c6-800c-a5b5e823d3d0",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appCGDrFxeErh9PhM",
+          "mode": "list",
+          "cachedResultName": "Lead CRM Training",
+          "cachedResultUrl": "https://airtable.com/appCGDrFxeErh9PhM"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbljg7hrydxkyEVL0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appCGDrFxeErh9PhM/tbljg7hrydxkyEVL0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $('Edit Fields').item.json.email }}",
+            "budget": "={{ $('Edit Fields').item.json.budget }}",
+            "phone": "={{ $('Edit Fields').item.json.phone }}",
+            "company": "={{ $('Edit Fields').item.json.company }}",
+            "service_needed": "={{ $('Edit Fields').item.json.service_needed }}",
+            "name": "={{ $('Edit Fields').item.json.name }}",
+            "notes": "="
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "service_needed",
+              "displayName": "service_needed",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "crm_setup",
+                  "value": "crm_setup"
+                },
+                {
+                  "name": "ai_agent",
+                  "value": "ai_agent"
+                },
+                {
+                  "name": "web-dev",
+                  "value": "web-dev"
+                },
+                {
+                  "name": "scraping ",
+                  "value": "scraping "
+                },
+                {
+                  "name": "service_needed",
+                  "value": "service_needed"
+                },
+                {
+                  "name": "automation",
+                  "value": "automation"
+                },
+                {
+                  "name": "scraping",
+                  "value": "scraping"
+                },
+                {
+                  "name": "web_dev",
+                  "value": "web_dev"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Lost",
+                  "value": "Lost"
+                },
+                {
+                  "name": "Contacted",
+                  "value": "Contacted"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "status",
+                  "value": "status"
+                },
+                {
+                  "name": "new",
+                  "value": "new"
+                },
+                {
+                  "name": "contacted",
+                  "value": "contacted"
+                },
+                {
+                  "name": "qualified",
+                  "value": "qualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        -192
+      ],
+      "id": "dee561d3-f787-439e-8cc2-3c059c64003c",
+      "name": "Update record",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "qH9g1tijshCwcxIy",
+          "name": "Airtable OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appCGDrFxeErh9PhM",
+          "mode": "list",
+          "cachedResultName": "Lead CRM Training",
+          "cachedResultUrl": "https://airtable.com/appCGDrFxeErh9PhM"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbljg7hrydxkyEVL0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appCGDrFxeErh9PhM/tbljg7hrydxkyEVL0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $('Edit Fields').item.json.name }}",
+            "phone": "={{ $('Edit Fields').item.json.phone }}",
+            "email": "={{ $('Edit Fields').item.json.email }}",
+            "company": "={{ $('Edit Fields').item.json.company }}",
+            "service_needed": "={{ $('Edit Fields').item.json.service_needed }}",
+            "budget": "={{ $('Edit Fields').item.json.budget }}",
+            "notes": "={{ $('Edit Fields').item.json.message }}",
+            "Status": "New",
+            "Owner": "={{ $('Edit Fields').item.json.company }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "service_needed",
+              "displayName": "service_needed",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "crm_setup",
+                  "value": "crm_setup"
+                },
+                {
+                  "name": "ai_agent",
+                  "value": "ai_agent"
+                },
+                {
+                  "name": "web-dev",
+                  "value": "web-dev"
+                },
+                {
+                  "name": "scraping ",
+                  "value": "scraping "
+                },
+                {
+                  "name": "service_needed",
+                  "value": "service_needed"
+                },
+                {
+                  "name": "automation",
+                  "value": "automation"
+                },
+                {
+                  "name": "scraping",
+                  "value": "scraping"
+                },
+                {
+                  "name": "web_dev",
+                  "value": "web_dev"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Lost",
+                  "value": "Lost"
+                },
+                {
+                  "name": "Contacted",
+                  "value": "Contacted"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "status",
+                  "value": "status"
+                },
+                {
+                  "name": "new",
+                  "value": "new"
+                },
+                {
+                  "name": "contacted",
+                  "value": "contacted"
+                },
+                {
+                  "name": "qualified",
+                  "value": "qualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        0
+      ],
+      "id": "11e827b0-e9b1-40ea-a574-6ea22e959036",
+      "name": "Create a record",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "qH9g1tijshCwcxIy",
+          "name": "Airtable OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "6daa765f-6630-4b93-89db-74911632885f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a42cbd4b1dba149b674e7cf443798c60569f2b63f6aefcfa381d2a03f9ca3948"
+  },
+  "nodeGroups": [],
+  "id": "sC35kAeh291vIX5G",
+  "tags": []
+}

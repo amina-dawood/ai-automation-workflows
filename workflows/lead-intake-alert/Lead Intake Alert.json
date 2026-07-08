@@ -1,0 +1,382 @@
+{
+  "name": "Lead Intake Alert",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-intake",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        -16
+      ],
+      "id": "970116e4-b77c-4206-8b9e-452da427c026",
+      "name": "Webhook",
+      "webhookId": "269962ec-4dbe-4344-9c17-18c7e26dc01d"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0b1d10b9-30f9-47d4-bb44-f6770d40ef93",
+              "name": "name",
+              "value": "={{ $json.body.data.fields[0].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "5d3fcaa7-69b0-410a-bd3e-8bdbcc2891b3",
+              "name": "email",
+              "value": "={{ $json.body.data.fields[1].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "a1cbc4bc-aff9-4386-a47c-217d68c41f37",
+              "name": "phone",
+              "value": "={{ $json.body.data.fields[2].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "3a389fe3-0a0a-4b1f-b5de-0289495962cd",
+              "name": "company",
+              "value": "={{ $json.body.data.fields[3].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "2b391912-9f9d-41ea-8a27-bc13af3abee7",
+              "name": "service_needed",
+              "value": "={{ $json.body.data.fields[4].value  }}",
+              "type": "array"
+            },
+            {
+              "id": "2fcb0271-649f-4f4f-aee3-4ddf1c763383",
+              "name": "budget",
+              "value": "={{ $json.body.data.fields[5].value  }}",
+              "type": "number"
+            },
+            {
+              "id": "e5309800-41b7-40f1-aa8c-c6f1ecdf7b2e",
+              "name": "timeline",
+              "value": "={{ $json.body.data.fields[6].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "500c633a-59f5-4ac5-a7f3-2342f24cc1b3",
+              "name": "message",
+              "value": "={{ $json.body.data.fields[7].value  }}",
+              "type": "string"
+            },
+            {
+              "id": "9a5c8677-224e-4f41-bace-50b448ad3214",
+              "name": "consent",
+              "value": "={{ $json.body.data.fields[8].value }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -16,
+        -16
+      ],
+      "id": "3306f3d6-52ce-4f34-a2cb-490ccfa68f0c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5fe9a5e9-3629-49b3-ace1-7e8d70e40b8e",
+              "leftValue": "={{ $json.budget }}",
+              "rightValue": "=1000",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        -16
+      ],
+      "id": "71def35b-486e-4070-bee4-754e1f75c4c7",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        416,
+        80
+      ],
+      "id": "20c4cf79-0035-4d8f-99c2-7bed089b426e",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "sendTo": "amna09872@gmail.com",
+        "subject": "High Priority Lead Received",
+        "emailType": "text",
+        "message": "=A new high-priority lead has been received.  Name: {{ $json.name }}  Email: {{ $json.email }}  Phone: {{ $json.phone }}  Company: {{ $json.company }}  Service Needed: {{ $json.service_needed }}  Budget: ${{ $json.budget }}  Timeline: {{ $json.timeline }}  Message: {{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        -112
+      ],
+      "id": "051fe499-af99-4df4-bf3d-35e1411f986f",
+      "name": "Send a message",
+      "webhookId": "31fc7eea-3a9e-4db6-9f0a-702a8e603fb0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yim6LUPN9U1mOx1Y",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "amna0208.app.n8n.cloud",
+            "user-agent": "Tally Webhooks",
+            "content-length": "2319",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "baggage": "sentry-environment=production,sentry-release=63e78c2a10d95b80431412243bb07015794e80c3,sentry-public_key=6af4b6673f1648edaa8fef3f2ca43405,sentry-trace_id=1bd448a3bc4314a8b70ed421f4b343ff,sentry-org_id=407628,sentry-sampled=false,sentry-sample_rand=0.359852567145893,sentry-sample_rate=0.001",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "34.96.41.179",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "BE",
+            "cf-ray": "a1560e977b8479be-LHR",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "sentry-trace": "1bd448a3bc4314a8b70ed421f4b343ff-b9cfc727f3d12f1f-0",
+            "x-forwarded-for": "34.96.41.179, 172.69.194.205",
+            "x-forwarded-host": "amna0208.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-79-57dcb74966-jb8p8",
+            "x-is-trusted": "yes",
+            "x-real-ip": "34.96.41.179"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "eventId": "0908f8ac-e456-4090-a17d-598f55722d5f",
+            "eventType": "FORM_RESPONSE",
+            "createdAt": "2026-07-03T11:15:33.227Z",
+            "data": {
+              "responseId": "LDYQVAy",
+              "submissionId": "LDYQVAy",
+              "respondentId": "PdPGdre",
+              "formId": "pb9xZZ",
+              "formName": "Client Lead Intake Form",
+              "createdAt": "2026-07-03T11:15:33.000Z",
+              "submissionPdfUrl": "https://api.tally.so/forms/pb9xZZ/submissions/LDYQVAy/pdf?accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJtaXNzaW9uSWQiOiJMRFlRVkF5IiwiZm9ybUlkIjoicGI5eFpaIiwiaWF0IjoxNzgzMDc3MzMzfQ.UDnCxLiHxU_tWUuVmD6Qj4BVfpluNUOvcmnoELE8r9g&signature=f85d71485b5207e7d6a214e15b17c1918b0d5911471f9f24fc4eadd05949d191",
+              "submissionPreviewUrl": "https://tally.so/forms/pb9xZZ/submissions/LDYQVAy/preview?accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJtaXNzaW9uSWQiOiJMRFlRVkF5IiwiZm9ybUlkIjoicGI5eFpaIiwiaWF0IjoxNzgzMDc3MzMzfQ.UDnCxLiHxU_tWUuVmD6Qj4BVfpluNUOvcmnoELE8r9g&signature=f85d71485b5207e7d6a214e15b17c1918b0d5911471f9f24fc4eadd05949d191",
+              "fields": [
+                {
+                  "key": "question_ZlX8x0",
+                  "label": "name",
+                  "type": "INPUT_TEXT",
+                  "value": "Ayesha Malik"
+                },
+                {
+                  "key": "question_NLvrzG",
+                  "label": "email",
+                  "type": "INPUT_EMAIL",
+                  "value": "ayesha.malik@brightco.com"
+                },
+                {
+                  "key": "question_qOXLy2",
+                  "label": "phone",
+                  "type": "INPUT_PHONE_NUMBER",
+                  "value": "+923099819290"
+                },
+                {
+                  "key": "question_Qdp1Gg",
+                  "label": "company",
+                  "type": "INPUT_TEXT",
+                  "value": "BrightCo Retail"
+                },
+                {
+                  "key": "question_9OPBVG",
+                  "label": "service_needed",
+                  "type": "DROPDOWN",
+                  "value": [
+                    "f5eee7fb-d086-493e-8571-ac78f710b7b9"
+                  ],
+                  "options": [
+                    {
+                      "id": "f5eee7fb-d086-493e-8571-ac78f710b7b9",
+                      "text": "automation"
+                    },
+                    {
+                      "id": "3e66bb8e-7d64-4c14-9ce6-67cd6c89f064",
+                      "text": "web-dev"
+                    },
+                    {
+                      "id": "026250b6-4594-4013-97a2-e1b656743397",
+                      "text": "scraping"
+                    }
+                  ]
+                },
+                {
+                  "key": "question_eL8M4q",
+                  "label": "budget",
+                  "type": "INPUT_TEXT",
+                  "value": "1500"
+                },
+                {
+                  "key": "question_WPX2yJ",
+                  "label": "timeline",
+                  "type": "INPUT_TEXT",
+                  "value": "2 week"
+                },
+                {
+                  "key": "question_a0X9V9",
+                  "label": "message",
+                  "type": "TEXTAREA",
+                  "value": "Need to automate our order confirmation emails"
+                },
+                {
+                  "key": "question_6RGLoe",
+                  "label": "consent",
+                  "type": "CHECKBOXES",
+                  "value": [
+                    "8971e326-efc1-498e-9513-e1980bd1bc49"
+                  ],
+                  "options": [
+                    {
+                      "id": "8971e326-efc1-498e-9513-e1980bd1bc49",
+                      "text": "I agree to be contacted about this inquiry"
+                    }
+                  ]
+                },
+                {
+                  "key": "question_6RGLoe_8971e326-efc1-498e-9513-e1980bd1bc49",
+                  "label": "consent (I agree to be contacted about this inquiry)",
+                  "type": "CHECKBOXES",
+                  "value": true
+                }
+              ]
+            }
+          },
+          "webhookUrl": "https://amna0208.app.n8n.cloud/webhook/lead-intake",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Edit Fields": [
+      {
+        "json": {
+          "name": "Ayesha Malik",
+          "email": "ayesha.malik@brightco.com",
+          "phone": "+923099819290",
+          "company": "BrightCo Retail",
+          "service_needed": [
+            "f5eee7fb-d086-493e-8571-ac78f710b7b9"
+          ],
+          "budget": 1500,
+          "timeline": "2 week",
+          "message": "Need to automate our order confirmation emails",
+          "consent": [
+            "8971e326-efc1-498e-9513-e1980bd1bc49"
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1,
+    "availableInMCP": false
+  },
+  "versionId": "23cac1ca-4a4d-496f-85db-d43438958d59",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a42cbd4b1dba149b674e7cf443798c60569f2b63f6aefcfa381d2a03f9ca3948"
+  },
+  "nodeGroups": [],
+  "id": "kfrNEnTMdHjKGRYm",
+  "tags": []
+}
